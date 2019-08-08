@@ -1,15 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
-import FormMy from './Form';
 import './App.css';
 
 function App() {
-
   return (
     <div className="App">
-      <header>
-      {/* <header className="App-header"> */}
-        {/* <img src={logo} className="App-logo" alt="logo" />
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
@@ -20,11 +17,8 @@ function App() {
           rel="noopener noreferrer"
         >
           Learn React
-        </a> */}
+        </a>
       </header>
-<main>
-  <FormMy   />
-</main>
     </div>
   );
 }
