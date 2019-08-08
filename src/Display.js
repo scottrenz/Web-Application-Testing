@@ -1,26 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+function Display(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{textAlign: 'left',marginLeft: '20%', border: 'medium solid black',width: '500px'}} >
+    <ul>Count</ul>
+    <li style={{marginLeft: '20%',width: '500px'}}>Balls: {props.ball}</li>
+    <li style={{marginLeft: '20%',width: '500px'}}>Strikes: {props.strike}</li>
     </div>
-  );
+    );
 }
 
-export default App;
+export default Display;

@@ -1,79 +1,109 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import { withFormik, Form, Field } from "formik";
-import * as Yup from "yup";
+// import * as Yup from "yup";
+import Display from "./Display";
 import axios from "axios";
 
 
 function LoginForm({ values, errors, touched, isSubmitting, handleSubmit, status }) {
-  const [users, setUsers] = useState([])
-  console.log('users up',users);
-  console.log('status up',status);
+    const [ball, setBall] = useState(0)
+    const [strike, setStrike] = useState(0)
+    // console.log('users up',users);
+  // console.log('status up',status);
+//   console.log('strike',status.strike)
 
   useEffect(() => {
     if (status) {
-      setUsers([...users, status]);
+        if (status.ball+status.strike+status.foul+status.over === 1) {
+            if (status.over)
+            {
+                    setBall(0)
+                    setStrike(0)
+            }        
+            if (status.ball)
+            {
+                if (ball === 3)
+                {
+                    setBall(0)
+                    setStrike(0)
+                }
+                else
+                {
+                    setBall(parseInt(ball) + 1)
+                }
+            }        
+            if (status.strike)
+            {
+                if (strike === 2)
+                {
+                    setBall(0)
+                    setStrike(0)
+                }
+                else
+                {
+                    setStrike(parseInt(strike) + 1)
+                }
+            }
+            if (status.foul)
+            {
+                if (parseInt(strike) === 2)
+                {
+                }
+                else
+                {
+                    setStrike(parseInt(strike) + 1)
+                }
+            }
+                    
+                                // console.log('strike',status.ball+status.strike+status.foul)
+        // setUsers([...users, status]);
     }
-  }, [status]);
+}
+}, [status]);
 
   return (
     <div>
     <Form >
-      <div>
-        {touched.email && errors.email && <p>{errors.email}</p>}
-        <Field type="email" name="email" placeholder="Email" />
-      </div>
-      <div>
-        {touched.password && errors.password && <p>{errors.password}</p>}
-        <Field type="password" name="password" placeholder="Password" />
-      </div>
-      <label>
-        <Field type="checkbox" name="tos" checked={values.tos} />
-        Accept TOS
+      <label>Ball
+        <Field style={{width: '50px'}} type="checkbox" name="ball" checked={values.ball} />
       </label>
-      <Field component="select" name="meal">
-        <option value="gold">Gold</option>
-        <option value="silver">Silver</option>
-        <option value="platinum">Platinum</option>
-      </Field>
+      <label>Strike
+        <Field style={{width: '50px'}} type="checkbox" name="strike" checked={values.strike} />
+      </label>
+      <label>Foul
+        <Field style={{width: '50px'}} type="checkbox" name="foul" checked={values.foul} />
+      </label>
+      <label>At Bat Has Ended
+        <Field style={{width: '50px'}} type="checkbox" name="over" checked={values.over} />
+      </label>
       <button disabled={isSubmitting}>Submit</button>
-))}
+
     </Form>
-
-{users.map(user => (
-  <div style={{textAlign: 'left',marginLeft: '20%', border: 'medium solid black',width: '500px'}} key={user.id}>
-  <ul>{user.id}</ul><li style={{marginLeft: '20%',width: '500px'}}> email: {user.email}</li>
-  <li style={{marginLeft: '20%',width: '500px'}}>meal: {user.meal}</li>
-  <li style={{marginLeft: '20%',width: '500px'}}>tos: {user.tos ? 'Yes' : 'No'x }</li>
-  </div>
-
-
-))}
+<Display ball={ball} strike={strike} />
 </div>
   );
 }
 
-const FormikLoginForm = withFormik({
-  mapPropsToValues({ email, password, tos, meal }) {
+const Dashboard = withFormik({
+  mapPropsToValues({ ball, strike, foul, over }) {
     return {
-      email: email || "",
-      password: password || "",
-      tos: tos || false,
-      meal: meal || "silver"
+      ball: ball || false,
+      strike: strike || false,
+      foul: foul || false,
+      over: over || false
     };
   },
-  validationSchema: Yup.object().shape({
-    email: Yup.string()
-      .email("Email not valid")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(2, "Password must be 2 characters or longer")
-      .required("Password is required")
-  }),
+
+//   validationSchema: Yup.object().shape({
+//     player: Yup.string()
+//       .min(2, "player must be 2 characters or longer")
+//       .required("player is required"),
+//   }),
 
   handleSubmit(values, { resetForm, setErrors, setSubmitting, setStatus }) {
-    if (values.email === "alreadytaken@atb.dev") {
-      setErrors({ email: "That email is already taken" });
+    if (false ) {
+      setErrors({ player: "That player is already taken" });
     } else {
       axios
       // https://reqres.in/api/users
@@ -81,9 +111,9 @@ const FormikLoginForm = withFormik({
       // .post("https://yourdatabaseurlgoeshere.com", values)
       .then(res => {
         setStatus(res.data);
-        console.log(res.data); // Data was created successfully and logs to console
+        // console.log(res.data); // Data was created successfully and logs to console
         // console.log('status',status); // Data was created successfully and logs to console
-          // resetForm();
+          resetForm();
           setSubmitting(false);
         })
         .catch(err => {
@@ -94,4 +124,4 @@ const FormikLoginForm = withFormik({
   }
 })(LoginForm);
 
-export default FormikLoginForm;
+export default Dashboard;

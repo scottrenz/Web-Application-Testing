@@ -1,11 +1,11 @@
 import React from 'react';
-import FormikLoginForm from './Dashboard';
+import Dashboard from './Dashboard';
 
 const FormMy = (props) => {
     
     return (
       <div >
-        <FormikLoginForm users={props.users} setUsers={props.setUsers} />
+        <Dashboard users={props.users} setUsers={props.setUsers} />
     </div>
   );
 };
