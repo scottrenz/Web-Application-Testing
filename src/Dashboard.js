@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 // import ReactDOM from "react-dom";
 import { withFormik, Form, Field } from "formik";
 // import * as Yup from "yup";
@@ -7,52 +7,71 @@ import axios from "axios";
 
 
 function LoginForm({ values, errors, touched, isSubmitting, handleSubmit, status }) {
-    const [ball, setBall] = useState(0)
-    const [strike, setStrike] = useState(0)
+    // const [data, setData] = useState('')
+    // const [ball, setBall] = useState(0)
+    // const [strike, setStrike] = useState(0)
+  
     // console.log('users up',users);
   // console.log('status up',status);
 //   console.log('strike',status.strike)
 
   useEffect(() => {
+
+    function gb () {return parseInt(localStorage.getItem('ball'))}
+    function gs () {return parseInt(localStorage.getItem('strike'))}
+    function sb (b) {localStorage.setItem('ball', b)}
+    function ss (s) {localStorage.setItem('strike', s)}
+
     if (status) {
         if (status.ball+status.strike+status.foul+status.over === 1) {
             if (status.over)
             {
-                    setBall(0)
-                    setStrike(0)
+               sb(0)
+               ss(0)
+                // setBall(0)
+                    // setStrike(0)
             }        
             if (status.ball)
-            {
-                if (ball === 3)
+           {
+            // console.log('gb',gb())
+            // console.log('gb',gb()+1)
+            if (gb() === 3)
                 {
-                    setBall(0)
-                    setStrike(0)
+                    sb(0)
+                    ss(0)
+                    //      setBall(0)
+                    // setStrike(0)
                 }
                 else
                 {
-                    setBall(parseInt(ball) + 1)
+                    sb(gb()+1)
+                        //  setBall(parseInt(ball) + 1)
                 }
             }        
             if (status.strike)
             {
-                if (strike === 2)
+                if (gs() === 2)
                 {
-                    setBall(0)
-                    setStrike(0)
+                    sb(0)
+                    ss(0)
+                    //      setBall(0)
+                    // setStrike(0)
                 }
                 else
                 {
-                    setStrike(parseInt(strike) + 1)
+                    ss(gs()+1)
+                        //  setStrike(parseInt(strike) + 1)
                 }
             }
             if (status.foul)
             {
-                if (parseInt(strike) === 2)
+                if (parseInt(gs()) === 2)
                 {
                 }
                 else
                 {
-                    setStrike(parseInt(strike) + 1)
+                    ss(gs()+1)
+                    // setStrike(parseInt(strike) + 1)
                 }
             }
                     
@@ -77,10 +96,10 @@ function LoginForm({ values, errors, touched, isSubmitting, handleSubmit, status
       <label>At Bat Has Ended
         <Field style={{width: '50px'}} type="checkbox" name="over" checked={values.over} />
       </label>
-      <button disabled={isSubmitting}>Submit</button>
+      <button type='submit' disabled={isSubmitting}>Submit</button>
 
     </Form>
-<Display ball={ball} strike={strike} />
+<Display />
 </div>
   );
 }
@@ -111,6 +130,7 @@ const Dashboard = withFormik({
       // .post("https://yourdatabaseurlgoeshere.com", values)
       .then(res => {
         setStatus(res.data);
+        // setStatus(res.data);
         // console.log(res.data); // Data was created successfully and logs to console
         // console.log('status',status); // Data was created successfully and logs to console
           resetForm();
